@@ -1,7 +1,26 @@
 # redshift-serverless-with-saml
-
+> Redshift Serverless, SAML, Keycloak, DBeaver
 
 # VPC 구성
+
+* 다운로드 [YAML](https://github.com/shinjoonghoon/redshift-serverless-with-saml/blob/main/redshift-serverless-with-saml.yaml).
+  - Stack name: `newbank`
+  - EnvironmentName: `newbank`
+
+
+* 준비된 VPC 환경
+
+<br>
+<img src="images/vpc-cf.png" alt=""></img>
+</br>
+
+* 환경 변수 정의
+```
+VPC_ID=
+REGION=$(aws configure get region --profile bank)
+echo $VPC_ID
+echo $REGION
+```
 * VPC 정보 조회
 * 서브넷 정보 조회
 
