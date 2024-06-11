@@ -17,12 +17,18 @@
 * 환경 변수 정의
 ```
 VPC_ID=
-REGION=$(aws configure get region --profile bank)
+REGION=$(aws configure get region)
 echo $VPC_ID
 echo $REGION
 ```
 * VPC 정보 조회
+```
+aws ec2 describe-vpcs --vpc-ids $VPC_ID
+```
 * 서브넷 정보 조회
+```
+aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
+```
 
 # VPC Endpoints 구성
 * VPC Endpoints 보안 그룹 생성
