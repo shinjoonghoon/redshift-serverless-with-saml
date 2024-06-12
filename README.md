@@ -11,8 +11,10 @@
 ```
 VPC_ID=
 REGION=$(aws configure get region)
+ACCOUNT=$(aws sts get-caller-identity --query 'Account' --output text)
 echo $VPC_ID
 echo $REGION
+echo $ACCOUNT
 ```
 * VPC 정보 조회
 ```
@@ -364,20 +366,71 @@ aws ec2 authorize-security-group-ingress \
       --filters "Name=tag:Name,Values='Keycloak'" \
       --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
       ```
-* Keycloak admin 접속 확인
-* DBeaver 설치
-* Redshift Serverless Endpoint 연결성 확인
-  - Test-NetConnection
-* Redshift JDBC driver 다운로드
-* 새로운 드라이버 생성
-* 새로운 Connection 생성
-  - Admin user
-* CloudWatch logs 확인
+    - Redshift Serverless Workgroup(`newbank-serverless-workgroup`) Endpoint 조회
+      ```
+      aws redshift-serverless get-workgroup --workgroup-name newbank-serverless-workgroup --query 'workgroup.endpoint.{address: address, port: port}' --output json
+      ```
+* Setup tools
+  - Server manager > Local Server > IE Enhanced Security Configuration: Off
+  - Chrome 설치
+  - Chrome을 기본 브라우저로 설정 및 시크릿 모드 실행
+  - 크롬 확장 프로그램 SAML-tracer 설치 및 실행
+  - [DBeaver 다운로드](https://dbeaver.io/download/)
+  - DBeaver 설치
+  - [Redshift JDBC driver 다운로드](https://s3.amazonaws.com/redshift-downloads/drivers/jdbc/2.1.0.28/redshift-jdbc42-2.1.0.28.zip)
+  - Redshift JDBC driver 압축 풀기
 
-# Keycloak 새로운 Realm과 사용자 생성
+* Redshift Serverless Workgroup(`newbank-serverless-workgroup`) Endpoint 연결성 확인
+  - nslookup [Redshift Serverless Endpoint]
+    ```
+    nslookup newbank-serverless-workgroup.$ACCOUNT.ap-northeast-2.redshift-serverless.amazonaws.com
+    ```
+  - Test-NetConnection [Redshift Serverless Endpoint] -Port 5454
+    ```
+    Test-NetConnection newbank-serverless-workgroup.$ACCOUNT.ap-northeast-2.redshift-serverless.amazonaws.com -Port 5454
+    ```
+
+* Keycloak admin site 접속 확인
+  - Keycloak instance PrivateIpAddress 조회
+    ```
+    aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values='Keycloak'" \
+    --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
+    ```
+  - 접속
+    ```
+    https://[PrivateDnsName]:8081
+    ```
+    <img src="images/keycloak-admin-site-8081.png" alt=""></img>
+    <img src="images/keycloak-admin-site-signin.png" alt=""></img>
+    <img src="images/keycloak-admin-site-welcome-mater-realm.png" alt=""></img>
+
+* DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift://`) 등록
+  - DBeaver > Database > Driver Manager > New
+  - Libraries
+    - Add Folder > redshift-jdbc42-2.1.0.28
+  - Settings
+    - Driver Name: `Redshift-Serverless-jdbc`
+    - Driver Type: `PostgreSQL`
+    - Class Name: `com.amazon.redshift.jdbc42.Driver`
+    - URL Template: `jdbc:redshift://{host}:{port}/{database}`
+    - Default Port: `5454`
+    - Default Database: `dev`
+  - OK
+
+* DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift:iam://`) 등록
+  - DBeaver > Database > Driver Manager > 앞서 등록한 Driver(`Redshift-Serverless-jdbc`) Copy
+  - Settings
+    - Driver Name: `Redshift-Serverless-iam`
+    - Driver Type: `PostgreSQL`
+    - Class Name: `com.amazon.redshift.jdbc42.Driver`
+    - URL Template: `jdbc:redshift:iam://{host}:{port}/{database}`
+    - Default Port: `5454`
+    - Default Database: `dev`
+  - OK
+
+# Keycloak 새로운 Realm 생성
 * Realm 생성
-* 사용자 생성
-* 사용자 접속 확인
 
 # AWS IAM Identity provider 구성
 * SAML 2.0 Identity Provider Metadata 다운로드
@@ -387,6 +440,10 @@ aws ec2 authorize-security-group-ingress \
 
 # AWS IAM Role 추가
 * role arn 확인
+
+# Keycloak 사용자 생성
+* 사용자 생성
+* 사용자 접속 확인
 
 # Keycloak Client 구성
 * AWS signin saml-metadata 다운로드
