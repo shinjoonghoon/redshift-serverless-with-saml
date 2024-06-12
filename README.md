@@ -34,11 +34,79 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 </br>
 
 * VPC Endpoints 보안 그룹 생성
+```
+aws ec2 create-security-group --description "VPC_ENDPOINT_SG" --group-name "VPC_ENDPOINT_SG" --vpc-id $VPC_ID --output json | jq '.[]'
+```
 * VPC Endpoints 보안 그룹 Ingress 추가
+```
+aws ec2 authorize-security-group-ingress \
+    --group-id $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`VPC_ENDPOINT_SG`)].GroupId' --output text) \
+    --protocol -1 --port -1 --cidr 10.192.0.0/16 \
+    \
+    --output json | jq '.[]'
+```
 * VPC Endpoints 서브넷 조회
+```
+aws ec2 describe-subnets \
+--filters "Name=tag:Name,Values='newbank VPC Endpoints Private Subnet*'" \
+--query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' \
+--output text
+```
 * VPC Endpoints 생성
+```
+myarray=(
+com.amazonaws.$REGION.ssm
+com.amazonaws.$REGION.ssmmessages
+com.amazonaws.$REGION.ec2messages
+com.amazonaws.$REGION.sts
+)
+for v in "${myarray[@]}"; do
+    aws ec2 create-vpc-endpoint \
+    --region $REGION  \
+    --vpc-endpoint-type Interface \
+    --vpc-id  $VPC_ID \
+    --security-group-ids $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`VPC_ENDPOINT_SG`)].GroupId' --output text) \
+    --subnet-ids $(aws ec2 describe-subnets --filters "Name=tag:Name,Values='newbank VPC Endpoints*'" --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].[SubnetId]' --output text) \
+    --service-name  $v \
+    \
+    --output json | jq '.[]'
+done
+```
+```
+aws ec2 create-vpc-endpoint \
+    --region $REGION  \
+    --vpc-endpoint-type Gateway \
+    --vpc-id  $VPC_ID \
+    --route-table-ids $(aws ec2 describe-route-tables --filters "Name=vpc-id,Values=$VPC_ID" --region ap-northeast-2 --query 'RouteTables[].RouteTableId' --output text) \
+    --service-name com.amazonaws.$REGION.s3 \
+    \
+    --output json | jq '.[]'
+```
+```
+aws ec2 create-vpc-endpoint \
+    --region $REGION  \
+    --service-name com.amazonaws.$REGION.s3 \
+    --vpc-id  $VPC_ID \
+    --subnet-ids $(aws ec2 describe-subnets --filters "Name=tag:Name,Values='newbank VPC Endpoints*'" --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].[SubnetId]' --output text) \
+    --vpc-endpoint-type Interface  \
+    --private-dns-enabled  \
+    --ip-address-type ipv4 \
+    --dns-options PrivateDnsOnlyForInboundResolverEndpoint=true \
+    --security-group-ids $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`VPC_ENDPOINT_SG`)].GroupId' --output text) \
+    \
+    --output json | jq '.[]'
+```
 * VPC Endpoints 조회
+```
+while true; do 
+aws ec2 describe-vpc-endpoints --filters "Name=vpc-id,Values=$VPC_ID" --region $REGION  --query 'VpcEndpoints[].[State,VpcEndpointType,ServiceName]' --output text;
+echo `date`; sleep 2; done;
+```
 * Network Insterface 조회
+```
+aws ec2 describe-network-interfaces --filters "Name=interface-type,Values=vpc_endpoint" "Name=vpc-id,Values=$VPC_ID" \
+--query 'NetworkInterfaces[*].{NetworkInterfaceId:NetworkInterfaceId,PrivateIpAddress:PrivateIpAddress, GroupName:Groups[0].GroupName}' --output text
+```
 
 # Redshift Serverless 구성
 
@@ -47,7 +115,17 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 </br>
 
 * Redshift Serverless 보안 그룹 생성
+```
+aws ec2 create-security-group --description "REDSHIFT_SG" --group-name "REDSHIFT_SG" --vpc-id $VPC_ID --output json | jq '.[]'
+```
 * Redshift Serverless 보안 그룹 Ingress 추가
+```
+aws ec2 authorize-security-group-ingress \
+    --group-id $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`REDSHIFT_SG`)].GroupId' --output text) \
+    --protocol -1 --port -1 --cidr 10.192.0.0/16 \
+    \
+    --output json | jq '.[]'
+```
 * Redshift Serverless 생성
 * Port 변경
 * Redshift Serverless Endpoint 확인
