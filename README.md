@@ -162,4 +162,9 @@ PrivateRouteTable2 --> PrivateRouteTable3
 
 # VPC Flow Logs
 
+# IP 기반 접근 제어
+
+# Redshift provisioned cluster
+
+
 
