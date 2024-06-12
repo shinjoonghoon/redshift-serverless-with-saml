@@ -553,8 +553,15 @@ aws ec2 authorize-security-group-ingress \
   <img src="images/keycloak-add-user10.png" alt=""></img>
 
 # Keycloak Client 구성
-* AWS signin saml-metadata 다운로드
-* Keycloak admin 접속
+* DBeaver Windows Client instance에서 AWS signin saml-metadata 다운로드
+```
+curl https://signin.aws.amazon.com/static/saml-metadata.xml -OutFile saml-metadata.xml
+```
+* Keycloak admin site에서 newbankrealm 접속
+  ```
+  https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
+  ```
+  <img src="images/.png" alt=""></img>
 * Import Client
 * Client Access settings
 
