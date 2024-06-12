@@ -404,6 +404,7 @@ aws ec2 authorize-security-group-ingress \
     <img src="images/keycloak-admin-site-8081.png" alt=""></img>
     <img src="images/keycloak-admin-site-signin.png" alt=""></img>
     <img src="images/keycloak-admin-site-welcome-mater-realm.png" alt=""></img>
+  - Realm 추가
 
 * DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift://`) 등록
   - DBeaver > Database > Driver Manager > New
@@ -428,9 +429,6 @@ aws ec2 authorize-security-group-ingress \
     - Default Port: `5454`
     - Default Database: `dev`
   - OK
-
-# Keycloak 새로운 Realm 생성
-* Realm 생성
 
 # AWS IAM Identity provider 구성
 * SAML 2.0 Identity Provider Metadata 다운로드
