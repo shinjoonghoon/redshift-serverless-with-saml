@@ -344,7 +344,7 @@ aws ec2 authorize-security-group-ingress \
 
 # DBeaver Windows Client instance에 접속
 * Windows Gateway을 통해 DBeaver Windows Client instance 접속
-<img src="images/connect-dbeaver-windows-client-instance.png" alt=""></img>
+<img src="images/connect-dbeaver-windows-client-instance-1.png" alt=""></img>
   - Instances 정보 조회
     - Windows Gateway instance PublicIpAddress 조회
       ```
