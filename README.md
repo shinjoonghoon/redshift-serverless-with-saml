@@ -573,7 +573,8 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   - Home URL: `/realms/newbankrealm/protocol/saml/clients/signin`
   - Valid redirect URIs: `http://localhost:7890/redshift/`
   - IDP-Initiated SSO URL name: `signin`
-  <img src="images/keycloak-newbankrealm-add-client6.png" alt=""></img>
+  - Master SAML Processing URL: `http://localhost:7890/redshift/`
+  <img src="images/keycloak-newbankrealm-add-client6-master-saml-processing-url.png" alt=""></img>
 * Client Advanced
   - Assertion Consumer Service POST Binding URL: `http://localhost:7890/redshift/`
   <img src="images/keycloak-newbankrealm-add-client7.png" alt=""></img>
