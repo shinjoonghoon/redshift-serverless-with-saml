@@ -632,7 +632,7 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/dbeaver-iam12.png" alt=""></img>
   - Keycloak sign-in 화면으로 redirect되면 Username, Password 입력
     <img src="images/dbeaver-iam13.png" alt=""></img>
-  - Authentication Redicrect
+  - Authentication Redirect
     <img src="images/dbeaver-iam14.png" alt=""></img>
   - Keycloak sign-in 성공 시 출력되는 화면
     <img src="images/dbeaver-iam15.png" alt=""></img>
