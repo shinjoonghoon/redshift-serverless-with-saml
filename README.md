@@ -111,7 +111,7 @@ aws ec2 describe-network-interfaces --filters "Name=interface-type,Values=vpc_en
 # Redshift Serverless 구성
 
 <br>
-<img src="images/redshift-serverless.png" alt=""></img>
+<img src="images/redshift-serverless-1.png" alt=""></img>
 </br>
 
 * Redshift Serverless 보안 그룹 생성
@@ -127,9 +127,62 @@ aws ec2 authorize-security-group-ingress \
     --output json | jq '.[]'
 ```
 * Redshift Serverless 생성
+  - Workgroup name:  `newbank-serverless-workgroup`
+  - Base capacity: `32`
+  - Virtual private cloud (VPC): `newbank`
+  - VPC security groups:
+    ```
+    aws ec2 describe-security-groups \
+    --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`REDSHIFT_SG`)].GroupId' \
+    --output text
+    ```
+  - Subnet
+    ```
+    aws ec2 describe-subnets \
+    --filters "Name=tag:Name,Values='newbank Redshift Private Subnet*'" \
+    --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' \
+    --output text
+    ```
+  - Turn on enhanced VPC routing
+  - Next
+  - Namespace: `newbank-serverless-namespace`
+  - Customize admin user credentials
+  - Admin user name: `admin`
+  - Admin password: Manually add the admin password(secretsmanager 사용 고려)
+  - Permissions > Associated IAM roles (0) --> No resoureces
+  - Security and encryption > Export these logs > User log, Connection log, User activity log
+  - Next
+  - Review and create
+  - Create
+
+
+* Redshift Serverless 상태 확인
+  - Workgroup Status 확인
+  ```
+      while true; do 
+  aws redshift-serverless get-workgroup --workgroup-name newbank-serverless-workgroup --query 'workgroup.status'     
+  echo `date`; sleep 2; done;
+  ```
+  - Namespace Status 확인
+  ```
+  while true; do 
+  aws redshift-serverless get-namespace --namespace-name newbank-serverless-namespace --query 'namespace.status'     
+  echo `date`; sleep 2; done;
+  ```
 * Port 변경
-* Redshift Serverless Endpoint 확인
-* Network Interfaces 확인
+```
+aws redshift-serverless update-workgroup --workgroup-name newbank-serverless-workgroup --port 5454
+```
+* Redshift Serverless Endpoint와 Network interfaces 확인
+```
+aws ec2 describe-network-interfaces \
+--filters "Name=group-id,Values=$(aws ec2 describe-security-groups \
+--query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`REDSHIFT_SG`)].GroupId' \
+--output text)" \
+--query "NetworkInterfaces[*].{InterfaceType: InterfaceType,NetworkInterfaceId: NetworkInterfaceId,Description: Description,PrivateIpAddress: PrivateIpAddress,InstanceOwnerId: Attachment.InstanceOwnerId}" \
+--profile default | jq '.[]'
+```
+
 
 # Keycloak instance 구성
 * 목표 아키텍처
