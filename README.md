@@ -579,7 +579,6 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   <img src="images/keycloak-newbankrealm-add-client7.png" alt=""></img>
   <img src="images/keycloak-newbankrealm-add-client8.png" alt="SAVE"></img>
 
-Driver Name: `Redshift-Serverless-jdbc`
 
 # DBeaver Test Connection as a redshift admin user
 * 새로운 connection 생성
