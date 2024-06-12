@@ -191,9 +191,37 @@ aws ec2 describe-network-interfaces \
 </br>
 
 * Keycloak instance 보안 그룹 생성
+```
+aws ec2 create-security-group --description "KEYCLOAK_SG" --group-name "KEYCLOAK_SG" --vpc-id $VPC_ID --output json | jq '.[]'
+```
 * Keycloak instance 보안 그룹 Ingress 추가
+```
+aws ec2 authorize-security-group-ingress \
+    --group-id $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`KEYCLOAK_SG`)].GroupId' --output text) \
+    --protocol -1 --port -1 --cidr 10.192.0.0/16 \
+    --output json | jq '.[]'
+```
 * Keycloak instance 생성
+  - Name: `Keycloak`
+  - AMI: Amazon Linux 2023 AMI
+  - Instance type: t3.medium
+  - Key pair : Key pair 선택
+  - VPC: `newbank`
+  - Subnet: newbank Keycloak Private Subnet 중 선택
+  ```
+  aws ec2 describe-subnets \
+  --filters "Name=tag:Name,Values='newbank Keycloak Private Subnet*'" \
+  --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
+  ```
+  - Security group: KEYCLOAK_SG
+  - IAM Instance profile: [Systems Manger로 Keycloak instance에 접속하기 위한 권한 부여](https://repost.aws/knowledge-center/ec2-systems-manager-vpc-endpoints)
+
 * Keycloak instance 정보 조회
+```
+aws ec2 describe-instances \
+--filters "Name=tag:Name,Values='Keycloak'" \
+--query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
+```
 * Keycloak instance 접속
 * Java runtime 설치
 * Keycloak download
