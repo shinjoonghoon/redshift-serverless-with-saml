@@ -718,6 +718,35 @@ Driver Name: `Redshift-Serverless-jdbc`
   <img src="images/keycloak-role-group8.png" alt=""></img>
 
 # DBeaver Test Connection
+* 사전 점검
+  - Keycloak neewbankrealm Sessions
+  <img src="images/dbeaver-iam-privateroutetable1.png" alt=""></img>
+  - netstat
+  <img src="images/dbeaver-iam-privateroutetable2.png" alt=""></img>
+* Connection 선택: `dev-iam`
+  <img src="images/dbeaver-iam-privateroutetable3.png" alt=""></img>
+* Test Connection
+  <img src="images/dbeaver-iam-privateroutetable4.png" alt=""></img>
+* Keycloak login page
+  <img src="images/dbeaver-iam-privateroutetable5.png" alt=""></img>
+* Username, Password 입력 후 Sign in
+  <img src="images/dbeaver-iam-privateroutetable6.png" alt=""></img>
+* Authentication Redirect
+  <img src="images/dbeaver-iam-privateroutetable7.png" alt=""></img>
+* Keycloak login 성공 시 출력되는 화면입니다.
+  <img src="images/dbeaver-iam-privateroutetable8.png" alt=""></img>
+* Connected
+  <img src="images/dbeaver-iam-privateroutetable9.png" alt=""></img>
+* Port 7890 확인
+  <img src="images/dbeaver-iam22-7890.png" alt=""></img>
+* SAML-tracer 확인
+  <img src="images/dbeaver-iam-privateroutetable10.png" alt=""></img>
+  <img src="images/dbeaver-iam-privateroutetable11.png" alt=""></img>
+* Keycloak session 확인
+  <img src="images/dbeaver-iam-privateroutetable12.png" alt=""></img>
+* Query
+  <img src="images/dbeaver-iam-privateroutetable13.png" alt=""></img>
+
 
 # DBeaver Private Subnet의 Route Table 변경
 PrivateRouteTable1 --> PrivateRouteTable2
