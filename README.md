@@ -535,7 +535,7 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   ```
 
 
-# Keycloak 사용자 생성
+# Keycloak newbankrealm User 생성
 * Keycloak admin site에서 newbankrealm 접속
   ```
   https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
@@ -554,7 +554,7 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   <img src="images/keycloak-add-user9.png" alt=""></img>
   <img src="images/keycloak-add-user10.png" alt=""></img>
 
-# Keycloak Client 구성
+# Keycloak newbankrealm Client 구성
 * DBeaver Windows Client instance에서 AWS signin saml-metadata 다운로드
   ```
   curl https://signin.aws.amazon.com/static/saml-metadata.xml -OutFile saml-metadata.xml
@@ -584,7 +584,7 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
 
 # Keycloak Group 생성
 
-# Test Connection
+# DBeaver Test Connection
 
 # DBeaver Private Subnet의 Route Table 변경
 PrivateRouteTable1 --> PrivateRouteTable2
