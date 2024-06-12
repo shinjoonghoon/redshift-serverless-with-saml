@@ -534,8 +534,22 @@ aws ec2 authorize-security-group-ingress \
 
 
 # Keycloak 사용자 생성
+* Keycloak admin site에서 newbankrealm 접속
+  ```
+  https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
+  ```
+  <img src="images/keycloak-add-user1" alt=""></img>
 * 사용자 생성
+  <img src="images/keycloak-add-user2" alt=""></img>
+  <img src="images/keycloak-add-user3" alt=""></img>
+  <img src="images/keycloak-add-user4" alt=""></img>
+  <img src="images/keycloak-add-user5" alt=""></img>
 * 사용자 접속 확인
+  <img src="images/keycloak-add-user6" alt=""></img>
+  <img src="images/keycloak-add-user7" alt=""></img>
+  <img src="images/keycloak-add-user8" alt=""></img>
+  <img src="images/keycloak-add-user9" alt=""></img>
+  <img src="images/keycloak-add-user10" alt=""></img>
 
 # Keycloak Client 구성
 * AWS signin saml-metadata 다운로드
