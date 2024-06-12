@@ -654,8 +654,8 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/dbeaver-iam21.png" alt=""></img>
 
 
-# Keycolak Mapper(SAML Attribute) 구성
-* Keycloak admin 접속
+# Keycolak newbankrealm Mapper(SAML Attribute) 구성
+* Keycloak newbankrealm admin 접속
   <img src="images/keycloak-role1.png" alt=""></img>
 * Client ID(urn:amazon:webservices) 선택
   <img src="images/keycloak-role2.png" alt=""></img>
@@ -683,24 +683,26 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/keycloak-role8.png" alt=""></img>
     <img src="images/keycloak-role9.png" alt=""></img>
   - Add mapper
-    Mapper type: `Role list`
-    Name: `Role`
-    Role attribute name: `https://aws.amazon.com/SAML/Attributes/Role`
-    Friendly name: `Role`
+    - Mapper type: `Role list`
+    - Name: `Role`
+    - Role attribute name: `https://aws.amazon.com/SAML/Attributes/Role`
+    - Friendly name: `Role`
     <img src="images/keycloak-role10.png" alt=""></img>
   - Add mapper
-    Mapper type: `User Property`
-    Name: `RoleSessionName`
-    Property: `email`
-    Friendly Name: `RoleSessionName`
-    SAML Attribute Name: `https://aws.amazon.com/SAML/Attributes/RoleSessionName`
+    - Mapper type: `User Property`
+    - Name: `RoleSessionName`
+    - Property: `email`
+    - Friendly Name: `RoleSessionName`
+    - SAML Attribute Name: `https://aws.amazon.com/SAML/Attributes/RoleSessionName`
     <img src="images/keycloak-role11.png" alt=""></img>
   - Add mapper
-    Mapper type: `Role Name Mapper`
-    Name: `Redshift Admin Role Mapping`
-    Role: `urn:amazon:webservices Redshift Admin` 선택
-    New Role Name 구조: [role arn],[identity provider arn]
-    New Role Name: `arn:aws:iam::[ACCOUNT]:role/newbankrealm_redshift_admin,arn:aws:iam::[ACCOUNT]:saml-provider/newbankrealm`
+    - Mapper type: `Role Name Mapper`
+    - Name: `Redshift Admin Role Mapping`
+    - Role: `urn:amazon:webservices Redshift Admin` 선택
+    - New Role Name: [role arn],[identity provider arn]
+      ```
+      arn:aws:iam::[ACCOUNT]:role/newbankrealm_redshift_admin,arn:aws:iam::[ACCOUNT]:saml-provider/newbankrealm
+      ```
     <img src="images/keycloak-role15.png" alt=""></img>
 
 # Keycloak Group, Member, Role mapping 구성
