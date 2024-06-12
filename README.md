@@ -2,15 +2,11 @@
 > Redshift Serverless, SAML, Keycloak, DBeaver
 
 # VPC 구성
-* 목표 아키텍처
-<br>
-<img src="images/vpc-cf.png" alt=""></img>
-</br>
-
 * 다운로드 [YAML](https://github.com/shinjoonghoon/redshift-serverless-with-saml/blob/main/redshift-serverless-with-saml.yaml).
   - Stack name: `newbank`
   - EnvironmentName: `newbank`
-
+* yaml 배포 후 VPC 다이어그램
+<img src="images/vpc-cf.png" alt=""></img>
 * 환경 변수 정의
 ```
 VPC_ID=
@@ -28,10 +24,8 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 ```
 
 # VPC Endpoints 구성
-* 목표 아키텍처
-<br>
+* VPC Endpoints 적용 후 VPC 다이어그램
 <img src="images/vpc-endpoints.png" alt=""></img>
-</br>
 
 * VPC Endpoints 보안 그룹 생성
 ```
@@ -110,9 +104,11 @@ aws ec2 describe-network-interfaces --filters "Name=interface-type,Values=vpc_en
 
 # Redshift Serverless 구성
 
-<br>
+* [Availability Zone IDs](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-usage-considerations.html)
+When you configure your Amazon Redshift Serverless instance, open Additional considerations, and make sure that the subnet IDs provided in Subnet contain at least three of the supported Availability Zone IDs.
+
+* Redshift Serverless 배포 후 VPC 다이어그램
 <img src="images/redshift-serverless-1.png" alt=""></img>
-</br>
 
 * Redshift Serverless 보안 그룹 생성
 ```
@@ -185,10 +181,8 @@ aws ec2 describe-network-interfaces \
 
 
 # Keycloak instance 구성
-* 목표 아키텍처
-<br>
+* Keycloak instance 배포 후 VPC 다이어그램
 <img src="images/keycloak-privateroutetable1.png" alt=""></img>
-</br>
 
 * Keycloak instance 보안 그룹 생성
 ```
@@ -214,7 +208,7 @@ aws ec2 authorize-security-group-ingress \
   --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
   ```
   - Security group: KEYCLOAK_SG
-  - IAM Instance profile: [Systems Manger로 Keycloak instance에 접속하기 위한 권한 부여](https://repost.aws/knowledge-center/ec2-systems-manager-vpc-endpoints)
+  - Advanced details > IAM Instance profile: [Systems Manger로 Keycloak instance에 접속하기 위한 권한 부여](https://repost.aws/knowledge-center/ec2-systems-manager-vpc-endpoints)
 
 * Keycloak instance 정보 조회
 ```
@@ -222,16 +216,65 @@ aws ec2 describe-instances \
 --filters "Name=tag:Name,Values='Keycloak'" \
 --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
 ```
-* Keycloak instance 접속
+* Systems Manger로 Keycloak instance에 접속
+```
+sudo su -
+```
 * Java runtime 설치
-* Keycloak download
+```
+dnf install java-21-amazon-corretto
+```
+* [Keycloak download](https://www.keycloak.org/downloads)
+```
+wget https://github.com/keycloak/keycloak/releases/download/24.0.4/keycloak-24.0.4.tar.gz
+```
+```
+tar -zxvf keycloak-24.0.4.tar.gz
+```
 * nslookup PrivateDnsName
+```
+aws ec2 describe-instances \
+--filters "Name=tag:Name,Values='Keycloak'" \
+--query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
+```
+```
+nslookup [PrivateDnsName]
+```
 * https 프로토콜을 사용하기 위해 키와 인증서 생성
-* 8081 Port로 Keycloak 시작
-* Keycloak Private Subnet의 Route Table 변경
+```
+cd /root/keycloak-24.0.4/bin
+```
+```
+openssl req -newkey rsa:4096 -nodes \
+-keyout keycloak-server.key.pem -x509 -days 3650 -out keycloak-server.crt.pem
+```
 <br>
-<img src="images/keycloak-privateroutetable2.png" alt=""></img>
+<img src="images/keycloak-self-signed-cert.png" alt=""></img>
 </br>
+
+* KEYCLOAK_ADMIN와 KEYCLOAK_ADMIN_PASSWORD 정의
+```
+export KEYCLOAK_ADMIN=admin
+export KEYCLOAK_ADMIN_PASSWORD=[Your Keycloak Admin Password]
+```
+
+* 8081 Port로 Keycloak 시작
+```
+nohup /root/keycloak-24.0.4/bin/kc.sh start-dev \
+--https-port=8081 \
+--https-certificate-file=/root/keycloak-24.0.4/bin/keycloak-server.crt.pem \
+--https-certificate-key-file=/root/keycloak-24.0.4/bin/keycloak-server.key.pem &
+```
+```
+tail -f nohup.out
+```
+```
+ps -ef | grep keycloak
+```
+* Keycloak Private Subnet의 Route Table 변경: 각 AZ에 있는 newbank Keycloak Private Subnet와 연결된 Route Table을 `newbank PrivateRouteTable1`에서 `newbank PrivateRouteTable2`로 변경
+
+* Keycloak Private Subnet의 Route Table 변경 후 VPC 다이어그램
+<img src="images/keycloak-privateroutetable2.png" alt=""></img>
 
 # Windows Gateway instance 구성
 * 목표 아키텍처
