@@ -471,7 +471,7 @@ aws ec2 authorize-security-group-ingress \
     - Provider name: `newbankrealm`
     - Metadata document: 앞서 Keycloak newbankrealm에서 다운로드한 `descriptor.xml` 선택
       <img src="images/aws-iam-identity-provider2.png" alt=""></img>
-  - saml provider arn 확인
+  - saml provider arn 조회
     ```
     aws iam list-saml-providers
     {
