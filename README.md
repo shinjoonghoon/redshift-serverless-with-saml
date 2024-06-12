@@ -22,6 +22,7 @@ aws ec2 describe-vpcs --vpc-ids $VPC_ID
 ```
 aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
 ```
+* [VPC Flow Logs 조회 환경 구성](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/vpc-flow-logs.html)
 
 # VPC Endpoints 구성
 * VPC Endpoints 적용 후 VPC 다이어그램
@@ -207,7 +208,7 @@ aws ec2 authorize-security-group-ingress \
   --filters "Name=tag:Name,Values='newbank Keycloak Private Subnet*'" \
   --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
   ```
-  - Security group: KEYCLOAK_SG
+  - Security group: `KEYCLOAK_SG`
   - Advanced details > IAM Instance profile: [Systems Manger로 Keycloak instance에 접속하기 위한 권한 부여](https://repost.aws/knowledge-center/ec2-systems-manager-vpc-endpoints)
 
 * Keycloak instance 정보 조회
@@ -277,26 +278,92 @@ ps -ef | grep keycloak
 <img src="images/keycloak-privateroutetable2.png" alt=""></img>
 
 # Windows Gateway instance 구성
-* 목표 아키텍처
-<br>
+* Windows Gateway instance 배포 후 VPC 다이어그램
 <img src="images/windows-gateway.png" alt=""></img>
-</br>
 
 * Windows Gateway instance 보안 그룹 생성
+```
+aws ec2 create-security-group --description "WINDOWS_GATEWAY_SG" --group-name "WINDOWS_GATEWAY_SG" --vpc-id $VPC_ID --output json | jq '.[]'
+```
 * Windows Gateway instance 보안 그룹 Ingress 추가
+```
+aws ec2 authorize-security-group-ingress \
+    --group-id $(aws ec2 describe-security-groups \
+    --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`WINDOWS_GATEWAY_SG`)].GroupId' --output text) \
+    --protocol tcp \
+    --port 3389 \
+    --cidr [Your IPv4 Address]/32 \
+    --output json | jq '.[]'
+```
 * Windows Gateway instance 생성
-
+  - Name: `Windows Gateway`
+  - AMI: Microsoft Windows Server 2022 Base
+  - Instance type: t3.medium
+  - Key pair : Key pair 선택
+  - VPC: `newbank`
+  - Subnet: newbank Public Subnet 중 선택
+  ```
+  aws ec2 describe-subnets \
+  --filters "Name=tag:Name,Values='newbank Public Subnet*'" \
+  --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
+  ```
+  - Auto-assign public IP: `Enable`
+  - Security group: `WINDOWS_GATEWAY_SG`
+  - Advanced details > IAM Instance profile: SSM Role
+ 
 # DBeaver Windows Client instance 구성
-* 목표 아키텍처
-<br>
+* DBeaver Windows Client instance 배포 후 VPC 다이어그램
 <img src="images/windows-dbeaver-privateroutetable1.png" alt=""></img>
-</br>
 
 * DBeaver Client instance 보안 그룹 생성
+```
+aws ec2 create-security-group --description "DBEAVER_CLIENT_SG" --group-name "DBEAVER_CLIENT_SG" --vpc-id $VPC_ID --output json | jq '.[]'
+```
 * DBeaver Client instance 보안 그룹 Ingress 추가
+```
+aws ec2 authorize-security-group-ingress \
+    --group-id $(aws ec2 describe-security-groups --query 'SecurityGroups[?(VpcId==`'$VPC_ID'` && GroupName==`DBEAVER_CLIENT_SG`)].GroupId' --output text) \
+    --protocol -1 --port -1 --cidr 10.192.0.0/16 \
+    --output json | jq '.[]'
+```
 * DBeaver Client instance 생성
+  - Name: `DBeaver Windows Client`
+  - AMI: Microsoft Windows Server 2022 Base
+  - Instance type: t3.medium
+  - Key pair : Key pair 선택
+  - VPC: `newbank`
+  - Subnet: newbank DBeaver Private Subnet 중 선택
+  ```
+  aws ec2 describe-subnets \
+  --filters "Name=tag:Name,Values='newbank DBeaver Private Subnet*'" \
+  --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_ID'`)].{CidrBlock: CidrBlock, SubnetId: SubnetId, Tags: Tags[?Key == `Name`].Value | [0]}' --output text
+  ```
+  - Auto-assign public IP: `Disable`
+  - Security group: `DBEAVER_CLIENT_SG`
+  - Advanced details > IAM Instance profile: SSM Role
 
 # DBeaver Windows Client instance에 접속
+* Windows Gateway을 통해 DBeaver Windows Client instance 접속
+<img src="images/connect-dbeaver-windows-client-instance.png" alt=""></img>
+  - Instances 정보 조회
+    - Windows Gateway instance PublicIpAddress 조회
+      ```
+      aws ec2 describe-instances \
+      --filters "Name=tag:Name,Values='Windows Gateway'" \
+      --query 'Reservations[*].Instances[*].{PublicIpAddress: PublicIpAddress, PublicDnsName: PublicDnsName}' | jq '.[]'
+      ```
+    - DBeaver Windows Client PrivateIpAddress 조회
+      ```
+      aws ec2 describe-instances \
+      --filters "Name=tag:Name,Values='DBeaver Windows Client'" \
+      --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
+      ```
+    - Keycloak instance PrivateIpAddress 조회
+      ```
+      aws ec2 describe-instances \
+      --filters "Name=tag:Name,Values='Keycloak'" \
+      --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
+      ```
 * Keycloak admin 접속 확인
 * DBeaver 설치
 * Redshift Serverless Endpoint 연결성 확인
