@@ -2,17 +2,14 @@
 > Redshift Serverless, SAML, Keycloak, DBeaver
 
 # VPC 구성
+* 목표 아키텍처
+<br>
+<img src="images/vpc-cf.png" alt=""></img>
+</br>
 
 * 다운로드 [YAML](https://github.com/shinjoonghoon/redshift-serverless-with-saml/blob/main/redshift-serverless-with-saml.yaml).
   - Stack name: `newbank`
   - EnvironmentName: `newbank`
-
-
-* 준비된 VPC 환경
-
-<br>
-<img src="images/vpc-cf.png" alt=""></img>
-</br>
 
 * 환경 변수 정의
 ```
@@ -31,6 +28,11 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 ```
 
 # VPC Endpoints 구성
+* 목표 아키텍처
+<br>
+<img src="images/vpc-endpoints.png" alt=""></img>
+</br>
+
 * VPC Endpoints 보안 그룹 생성
 * VPC Endpoints 보안 그룹 Ingress 추가
 * VPC Endpoints 서브넷 조회
@@ -39,6 +41,11 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 * Network Insterface 조회
 
 # Redshift Serverless 구성
+
+<br>
+<img src="images/redshift-serverless.png" alt=""></img>
+</br>
+
 * Redshift Serverless 보안 그룹 생성
 * Redshift Serverless 보안 그룹 Ingress 추가
 * Redshift Serverless 생성
@@ -47,6 +54,11 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 * Network Interfaces 확인
 
 # Keycloak instance 구성
+* 목표 아키텍처
+<br>
+<img src="images/keycloak-privateroutetable1.png" alt=""></img>
+</br>
+
 * Keycloak instance 보안 그룹 생성
 * Keycloak instance 보안 그룹 Ingress 추가
 * Keycloak instance 생성
@@ -58,13 +70,26 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 * https 프로토콜을 사용하기 위해 키와 인증서 생성
 * 8081 Port로 Keycloak 시작
 * Keycloak Private Subnet의 Route Table 변경
+<br>
+<img src="images/keycloak-privateroutetable2.png" alt=""></img>
+</br>
 
 # Windows Gateway instance 구성
+* 목표 아키텍처
+<br>
+<img src="images/windows-gateway.png" alt=""></img>
+</br>
+
 * Windows Gateway instance 보안 그룹 생성
 * Windows Gateway instance 보안 그룹 Ingress 추가
 * Windows Gateway instance 생성
 
 # DBeaver Windows Client instance 구성
+* 목표 아키텍처
+<br>
+<img src="images/windows-dbeaver-privateroutetable1.png" alt=""></img>
+</br>
+
 * DBeaver Client instance 보안 그룹 생성
 * DBeaver Client instance 보안 그룹 Ingress 추가
 * DBeaver Client instance 생성
@@ -121,9 +146,15 @@ aws ec2 describe-subnets --query 'sort_by(Subnets, &CidrBlock)[?(VpcId==`'$VPC_I
 
 # DBeaver Private Subnet의 Route Table 변경
 PrivateRouteTable1 --> PrivateRouteTable2
+<br>
+<img src="images/windows-dbeaver-privateroutetable2.png" alt=""></img>
+</br>
 
 # DBeaver Private Subnet의 Route Table 변경
 PrivateRouteTable2 --> PrivateRouteTable3
+<br>
+<img src="images/windows-dbeaver-privateroutetable3.png" alt=""></img>
+</br>
 
 # CloudTrail
 
