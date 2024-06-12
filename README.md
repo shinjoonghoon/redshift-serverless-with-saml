@@ -602,12 +602,44 @@ Driver Name: `Redshift-Serverless-jdbc`
 
 # DBeaver Test Connection using Redshift-Serverless-iam Driver
 * 새로운 connection 생성
-* login_url
-* plugin_name
-* Connection error
-* SAML-tracer 확인
-* Connection 생성
-* Keycloak session 확인
+  <img src="images/dbeaver-iam1.png" alt=""></img>
+* 데이터베이스, 커넥션 템플릿 선택
+  - Name: `Redshift-Serverless-iam`
+    <img src="images/dbeaver-iam2.png" alt=""></img>
+  - DB 연결 설정
+    - Host: `[Redshift Serverless Endpoint]`
+    - Port: `5454`
+    - Database: `dev`
+    <img src="images/dbeaver-iam3.png" alt=""></img>
+  - SSL 활성화
+    <img src="images/dbeaver-iam4.png" alt=""></img>
+  - login_url property 추가
+    <img src="images/dbeaver-iam5.png" alt=""></img>
+    <img src="images/dbeaver-iam6.png" alt=""></img>
+    <img src="images/dbeaver-iam7.png" alt=""></img>
+    <img src="images/dbeaver-iam8.png" alt=""></img>
+  - plugin_name property 추가
+    <img src="images/dbeaver-iam9.png" alt=""></img>
+    <img src="images/dbeaver-iam10.png" alt=""></img>
+* Test Connection
+  <img src="images/dbeaver-iam11.png" alt=""></img>
+  <img src="images/dbeaver-iam12.png" alt=""></img>
+  <img src="images/dbeaver-iam13.png" alt=""></img>
+  <img src="images/dbeaver-iam14.png" alt=""></img>
+  <img src="images/dbeaver-iam15.png" alt=""></img>
+  - Connection error
+    ```
+    No role found in SamlAssertion:     PHNhbWxwOlJlc3Bv...
+    ```
+    <img src="images/dbeaver-iam16.png" alt=""></img>
+  - SAML-tracer 확인
+    <img src="images/dbeaver-iam18.png" alt=""></img>
+    <img src="images/dbeaver-iam19.png" alt=""></img>
+  - Keycloak session 확인
+    <img src="images/dbeaver-iam17.png" alt=""></img>
+  - Connection 생성
+    <img src="images/dbeaver-iam20.png" alt=""></img>
+    <img src="images/dbeaver-iam21.png" alt=""></img>
 
 
 # Keycolak Mapper(SAML Attribute) 구성
