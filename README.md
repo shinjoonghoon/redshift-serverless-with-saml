@@ -405,6 +405,10 @@ aws ec2 authorize-security-group-ingress \
     <img src="images/keycloak-admin-site-signin.png" alt=""></img>
     <img src="images/keycloak-admin-site-welcome-mater-realm.png" alt=""></img>
   - Realm 신규 생성
+    - Realm name: `newbankrealm`
+      <img src="images/keycloak-create-realm.png" alt=""></img>
+      <img src="images/keycloak-create-realm-newbankrealm.png" alt=""></img>
+      <img src="images/keycloak-welcome-to-newbankrealm.png" alt=""></img>
 
 * DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift://`) 등록
   - DBeaver > Database > Driver Manager > New
