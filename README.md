@@ -538,18 +538,19 @@ aws ec2 authorize-security-group-ingress \
   ```
   https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
   ```
-  <img src="images/keycloak-add-user1" alt=""></img>
+  <img src="images/keycloak-add-user1.png" alt=""></img>
 * 사용자 생성
-  <img src="images/keycloak-add-user2" alt=""></img>
-  <img src="images/keycloak-add-user3" alt=""></img>
-  <img src="images/keycloak-add-user4" alt=""></img>
-  <img src="images/keycloak-add-user5" alt=""></img>
+  <img src="images/keycloak-add-user2.png" alt=""></img>
+  <img src="images/keycloak-add-user3.png" alt=""></img>
+  <img src="images/keycloak-add-user4.png" alt=""></img>
+  <img src="images/keycloak-add-user5.png" alt=""></img>
 * 사용자 접속 확인
-  <img src="images/keycloak-add-user6" alt=""></img>
-  <img src="images/keycloak-add-user7" alt=""></img>
-  <img src="images/keycloak-add-user8" alt=""></img>
-  <img src="images/keycloak-add-user9" alt=""></img>
-  <img src="images/keycloak-add-user10" alt=""></img>
+  - Clients > Client ID(account) > Home URL Click(or Copy)
+  <img src="images/keycloak-add-user6.png" alt=""></img>
+  <img src="images/keycloak-add-user7.png" alt=""></img>
+  <img src="images/keycloak-add-user8.png" alt=""></img>
+  <img src="images/keycloak-add-user9.png" alt=""></img>
+  <img src="images/keycloak-add-user10.png" alt=""></img>
 
 # Keycloak Client 구성
 * AWS signin saml-metadata 다운로드
