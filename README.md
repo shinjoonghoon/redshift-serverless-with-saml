@@ -563,9 +563,21 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   ```
   https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
   ```
-  <img src="images/.png" alt=""></img>
-* Import Client
+  <img src="images/keycloak-newbankrealm-add-client1.png" alt=""></img>
+* Import Client(`urn:amazon:webservices`)
+  <img src="images/keycloak-newbankrealm-add-client2.png" alt=""></img>
+  <img src="images/keycloak-newbankrealm-add-client3.png" alt=""></img>
+  <img src="images/keycloak-newbankrealm-add-client4.png" alt=""></img>
+  <img src="images/keycloak-newbankrealm-add-client5.png" alt="SAVE"></img>
 * Client Access settings
+  - Home URL: `/realms/newbankrealm/protocol/saml/clients/signin`
+  - Valid redirect URIs: `http://localhost:7890/redshift/`
+  - IDP-Initiated SSO URL name: `signin`
+  <img src="images/keycloak-newbankrealm-add-client6.png" alt=""></img>
+* Client Advanced
+  - Assertion Consumer Service POST Binding URL: `http://localhost:7890/redshift/`
+  <img src="images/keycloak-newbankrealm-add-client7.png" alt=""></img>
+  <img src="images/keycloak-newbankrealm-add-client8.png" alt="SAVE"></img>
 
 # DBeaver Test Connection
 * 새로운 connection 생성
