@@ -579,7 +579,28 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
   <img src="images/keycloak-newbankrealm-add-client7.png" alt=""></img>
   <img src="images/keycloak-newbankrealm-add-client8.png" alt="SAVE"></img>
 
-# DBeaver Test Connection
+Driver Name: `Redshift-Serverless-jdbc`
+
+# DBeaver Test Connection using Redshift-Serverless-jdbc Driver
+* 새로운 connection 생성
+  <img src="images/dbeaver-jdbc1.png" alt=""></img>
+* 데이터베이스, 커넥션 템플릿 선택
+  - Name: `Redshift-Serverless-jdbc`
+    <img src="images/dbeaver-jdbc2.png" alt=""></img>
+  - DB 연결 설정
+    - Host: `[Redshift Serverless Endpoint]`
+    - Port: `5454`
+    - Database: `dev`
+    - Username: `[Redshift Admin user name]`
+    - Password: `[Redshift Admin password]`
+    <img src="images/dbeaver-jdbc3.png" alt=""></img>
+* Test Connection
+  <img src="images/dbeaver-jdbc4.png" alt=""></img>
+* Connection 생성
+  - Connection Name: `dev-jdbc`
+    <img src="images/dbeaver-jdbc5.png" alt=""></img>
+
+# DBeaver Test Connection using Redshift-Serverless-iam Driver
 * 새로운 connection 생성
 * login_url
 * plugin_name
@@ -587,6 +608,7 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
 * SAML-tracer 확인
 * Connection 생성
 * Keycloak session 확인
+
 
 # Keycolak Mapper(SAML Attribute) 구성
 * Keycloak admin 접속
