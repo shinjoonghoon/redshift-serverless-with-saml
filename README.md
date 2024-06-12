@@ -637,7 +637,7 @@ Driver Name: `Redshift-Serverless-jdbc`
   - Keycloak login 성공 시 출력되는 화면입니다.
     <img src="images/dbeaver-iam15.png" alt=""></img>
   - Connection error
-    > 아직 newbankrealm에 Role을 구성하지 않았기 때문에 아래 error는 정상적이다.
+    > 아직 newbankrealm에 Role을 구성하지 않았기 때문에 아래 error(`No role found in SamlAssertion`)는 정상적입니다.
     ```
     No role found in SamlAssertion:     PHNhbWxwOlJlc3Bv...
     ```
