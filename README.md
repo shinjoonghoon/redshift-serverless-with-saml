@@ -760,15 +760,6 @@ PrivateRouteTable2 --> PrivateRouteTable3
 <img src="images/windows-dbeaver-privateroutetable3.png" alt=""></img>
 </br>
 
-# CloudTrail
-
-# CloudWatch Logs
-
-# VPC Flow Logs
-
-# IP 기반 접근 제어
-
-# Redshift provisioned cluster
 
 
 
