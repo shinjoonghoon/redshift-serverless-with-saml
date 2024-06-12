@@ -630,11 +630,11 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/dbeaver-iam11.png" alt=""></img>
   - Test Connection 시작
     <img src="images/dbeaver-iam12.png" alt=""></img>
-  - Keycloak sign-in 화면으로 redirect되면 Username, Password 입력
+  - `login_url`에 설정한 Keycloak login 페이지가 정상적으로 열려야 합니다. Username, Password 입력 후 Sign in
     <img src="images/dbeaver-iam13.png" alt=""></img>
   - Authentication Redirect
     <img src="images/dbeaver-iam14.png" alt=""></img>
-  - Keycloak sign-in 성공 시 출력되는 화면
+  - Keycloak login 성공 시 출력되는 화면입니다.
     <img src="images/dbeaver-iam15.png" alt=""></img>
   - Connection error
     > 아직 newbankrealm에 Role을 구성하지 않았기 때문에 아래 error는 정상적이다.
@@ -642,6 +642,8 @@ Driver Name: `Redshift-Serverless-jdbc`
     No role found in SamlAssertion:     PHNhbWxwOlJlc3Bv...
     ```
     <img src="images/dbeaver-iam16.png" alt=""></img>
+  - Port 7890 확인
+    <img src="images/dbeaver-iam22-7890.png" alt=""></img>
   - SAML-tracer 확인
     <img src="images/dbeaver-iam18.png" alt=""></img>
     <img src="images/dbeaver-iam19.png" alt=""></img>
