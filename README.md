@@ -9,7 +9,7 @@
   <img src="images/vpc-cf.png" alt=""></img>
 * 환경 변수 정의
   ```
-  VPC_ID=
+  VPC_ID=vpc-12345678901234567
   ```
   ```
   REGION=$(aws configure get region)
