@@ -464,13 +464,74 @@ aws ec2 authorize-security-group-ingress \
       curl https://[Keycloak PrivateDnsName]:8081/realms/newbankrealm/protocol/saml/descriptor -OutFile descriptor.xml
       ```
 
-# AWS IAM Identity provider 등록
-* IAM Console 접속
-* Add Provider
-* saml provider arn 확인
-
+* AWS IAM Identity provider 추가
+  - IAM > Identity providers
+    <img src="images/aws-iam-identity-provider1.png" alt=""></img>
+  - Add Provider
+    - Provider name: `newbankrealm`
+    - Metadata document: 앞서 Keycloak newbankrealm에서 다운로드한 `descriptor.xml` 선택
+      <img src="images/aws-iam-identity-provider2.png" alt=""></img>
+  - saml provider arn 확인
+    ```
+    aws iam list-saml-providers
+    {
+        "SAMLProviderList": [
+            {
+                "Arn": "arn:aws:iam::[ACCOUNT]:saml-provider/newbankrealm",
+                "ValidUntil": "2124-06-12T07:38:00+00:00",
+                "CreateDate": "2024-06-12T07:38:00+00:00"
+            }
+        ]
+    }
+    ```
+  
 # AWS IAM Role 추가
-* role arn 확인
+* 작업 순서
+  - IAM > Roles > Create role
+  - Trusted entity type: `SAML 2.0 federation`
+  - SAML 2.0–based provider: `newbankrealm`
+  - Access to be allowed: `Allow programmatic access only`
+  - Attribute: `SAML:aud`
+  - Value: `http://localhost:7890/redshift/`
+    <img src="images/aws-iam-role1.png" alt=""></img>
+  - Next
+  - Add permissions: `AmazonRedshiftFullAccess` 선택
+  - Next
+  - Role name: `newbankrealm_redshift_admin`
+* newbankrealm_redshift_admin role 조회
+  ```
+  aws iam get-role --role-name newbankrealm_redshift_admin
+  {
+      "Role": {
+          "Path": "/",
+          "RoleName": "newbankrealm_redshift_admin",
+          "RoleId": "AROA2ADNFLLFNNRXTV4I4",
+          "Arn": "arn:aws:iam::[ACCOUNT]:role/newbankrealm_redshift_admin",
+          "CreateDate": "2024-06-12T07:47:06+00:00",
+          "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                  {
+                      "Effect": "Allow",
+                      "Principal": {
+                          "Federated": "arn:aws:iam::[ACCOUNT]:saml-provider/newbankrealm"
+                      },
+                      "Action": "sts:AssumeRoleWithSAML",
+                      "Condition": {
+                          "StringEquals": {
+                              "SAML:aud": "http://localhost:7890/redshift/"
+                          }
+                      }
+                  }
+              ]
+          },
+          "Description": "",
+          "MaxSessionDuration": 3600,
+          "RoleLastUsed": {}
+      }
+  }
+  ```
+
 
 # Keycloak 사용자 생성
 * 사용자 생성
