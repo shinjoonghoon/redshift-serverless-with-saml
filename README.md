@@ -656,11 +656,64 @@ Driver Name: `Redshift-Serverless-jdbc`
 
 # Keycolak Mapper(SAML Attribute) 구성
 * Keycloak admin 접속
-* Role
-* RoleSessionName
-* Role Name Mapper 구성
+  <img src="images/keycloak-role1.png" alt=""></img>
+* Client ID(urn:amazon:webservices) 선택
+  <img src="images/keycloak-role2.png" alt=""></img>
+* Client scopes > role_list 삭제
+  <img src="images/keycloak-role3.png" alt=""></img>
+  <img src="images/keycloak-role4.png" alt=""></img>
+  <img src="images/keycloak-role5.png" alt=""></img>
+  <img src="images/keycloak-role6.png" alt=""></img>
+* Client scopes > urn:amazon:webservices-dedicated > Scope 변경
+  - Full scope allowed: Off
+    <img src="images/keycloak-role7.png" alt=""></img>
+* Client > Client ID(urn:amazon:webservices) > Roles
+  - Create role
+    <img src="images/keycloak-role12.png" alt=""></img>
+  - Role name: `Redshift Admin`
+    <img src="images/keycloak-role13.png" alt=""></img>
+    <img src="images/keycloak-role14.png" alt=""></img>
+  
+* Client scopes > urn:amazon:webservices-dedicated > Mappers
+  - 자동으로 등록된 Mappers 삭제
+    ```
+    https://aws.amazon.com/SAML/Attributes/Role
+    https://aws.amazon.com/SAML/Attributes/RoleSessionName
+    ```
+    <img src="images/keycloak-role8.png" alt=""></img>
+    <img src="images/keycloak-role9.png" alt=""></img>
+  - Add mapper
+    Mapper type: `Role list`
+    Name: `Role`
+    Role attribute name: `https://aws.amazon.com/SAML/Attributes/Role`
+    Friendly name: `Role`
+    <img src="images/keycloak-role10.png" alt=""></img>
+  - Add mapper
+    Mapper type: `User Property`
+    Name: `RoleSessionName`
+    Property: `email`
+    Friendly Name: `RoleSessionName`
+    SAML Attribute Name: `https://aws.amazon.com/SAML/Attributes/RoleSessionName`
+    <img src="images/keycloak-role11.png" alt=""></img>
+  - Add mapper
+    Mapper type: `Role Name Mapper`
+    Name: `Redshift Admin Role Mapping`
+    Role: `urn:amazon:webservices Redshift Admin` 선택
+    New Role Name 구조: [role arn],[identity provider arn]
+    New Role Name: `arn:aws:iam::[ACCOUNT]:role/newbankrealm_redshift_admin,arn:aws:iam::[ACCOUNT]:saml-provider/newbankrealm`
+    <img src="images/keycloak-role15.png" alt=""></img>
 
-# Keycloak Group 생성
+# Keycloak Group, Member, Role mapping 구성
+* Create Group
+  <img src="images/keycloak-role-group1.png" alt=""></img>
+* Add members
+  <img src="images/keycloak-role-group2.png" alt=""></img>
+  <img src="images/keycloak-role-group3.png" alt=""></img>
+  <img src="images/keycloak-role-group4.png" alt=""></img>
+  <img src="images/keycloak-role-group5.png" alt=""></img>
+* Role mapping
+  <img src="images/keycloak-role-group7.png" alt=""></img>
+  <img src="images/keycloak-role-group8.png" alt=""></img>
 
 # DBeaver Test Connection
 
