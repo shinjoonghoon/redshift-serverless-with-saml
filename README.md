@@ -347,7 +347,7 @@ aws ec2 authorize-security-group-ingress \
 # DBeaver Windows Client instance에 접속
 * Windows Gateway을 통해 DBeaver Windows Client instance 접속
 <img src="images/connect-dbeaver-windows-client-instance-1.png" alt=""></img>
-  - Instances 정보 조회
+  - Instances 및 Redshift Serverless Workgroup Endpoint 접속 정보 조회
     - Windows Gateway instance PublicIpAddress 조회
       ```
       aws ec2 describe-instances \
@@ -390,21 +390,21 @@ aws ec2 authorize-security-group-ingress \
     Test-NetConnection newbank-serverless-workgroup.$ACCOUNT.ap-northeast-2.redshift-serverless.amazonaws.com -Port 5454
     ```
 
-* Keycloak admin site 접속 확인
+* Keycloak admin site 접속 및 Realm 신규 생성
   - Keycloak instance PrivateIpAddress 조회
     ```
     aws ec2 describe-instances \
     --filters "Name=tag:Name,Values='Keycloak'" \
     --query 'Reservations[*].Instances[*].{PrivateIpAddress: PrivateIpAddress, PrivateDnsName: PrivateDnsName}' | jq '.[]'
     ```
-  - 접속
+  - Keycloak admin site 접속
     ```
     https://[PrivateDnsName]:8081
     ```
     <img src="images/keycloak-admin-site-8081.png" alt=""></img>
     <img src="images/keycloak-admin-site-signin.png" alt=""></img>
     <img src="images/keycloak-admin-site-welcome-mater-realm.png" alt=""></img>
-  - Realm 추가
+  - Realm 신규 생성
 
 * DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift://`) 등록
   - DBeaver > Database > Driver Manager > New
