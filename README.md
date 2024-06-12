@@ -613,21 +613,31 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/dbeaver-iam3.png" alt=""></img>
   - SSL 활성화
     <img src="images/dbeaver-iam4.png" alt=""></img>
-  - login_url property 추가
-    <img src="images/dbeaver-iam5.png" alt=""></img>
-    <img src="images/dbeaver-iam6.png" alt=""></img>
-    <img src="images/dbeaver-iam7.png" alt=""></img>
-    <img src="images/dbeaver-iam8.png" alt=""></img>
-  - plugin_name property 추가
-    <img src="images/dbeaver-iam9.png" alt=""></img>
-    <img src="images/dbeaver-iam10.png" alt=""></img>
+  - Keycloak login url property 추가
+    - Property Name: `login_url`
+      <img src="images/dbeaver-iam5.png" alt=""></img>
+      <img src="images/dbeaver-iam6.png" alt=""></img>
+    - Client ID(urn:amazon:webservices) Home URL 복사 > `login_url`의 Value 입력
+      <img src="images/dbeaver-iam7.png" alt=""></img>
+      <img src="images/dbeaver-iam8.png" alt=""></img>
+  - Redshift JDBC plug-in property 추가
+    - Property Name: `plugin_name`
+    - Value: `com.amazon.redshift.plugin.BrowserSamlCredentialsProvider`
+      <img src="images/dbeaver-iam9.png" alt=""></img>
+      <img src="images/dbeaver-iam10.png" alt=""></img>
 * Test Connection
-  <img src="images/dbeaver-iam11.png" alt=""></img>
-  <img src="images/dbeaver-iam12.png" alt=""></img>
-  <img src="images/dbeaver-iam13.png" alt=""></img>
-  <img src="images/dbeaver-iam14.png" alt=""></img>
-  <img src="images/dbeaver-iam15.png" alt=""></img>
+  - Click Test Connection
+    <img src="images/dbeaver-iam11.png" alt=""></img>
+  - Test Connection 시작
+    <img src="images/dbeaver-iam12.png" alt=""></img>
+  - Keycloak sign-in 화면으로 redirect되면 Username, Password 입력
+    <img src="images/dbeaver-iam13.png" alt=""></img>
+  - Authentication Redicrect
+    <img src="images/dbeaver-iam14.png" alt=""></img>
+  - Keycloak sign-in 성공 시 출력되는 화면
+    <img src="images/dbeaver-iam15.png" alt=""></img>
   - Connection error
+    > 아직 newbankrealm에 Role을 구성하지 않았기 때문에 아래 error는 정상적이다.
     ```
     No role found in SamlAssertion:     PHNhbWxwOlJlc3Bv...
     ```
