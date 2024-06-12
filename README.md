@@ -399,7 +399,7 @@ aws ec2 authorize-security-group-ingress \
     ```
   - Keycloak admin site 접속
     ```
-    https://[PrivateDnsName]:8081
+    https://[Keycloak PrivateDnsName]:8081
     ```
     <img src="images/keycloak-admin-site-8081.png" alt=""></img>
     <img src="images/keycloak-admin-site-signin.png" alt=""></img>
@@ -421,6 +421,7 @@ aws ec2 authorize-security-group-ingress \
     - URL Template: `jdbc:redshift://{host}:{port}/{database}`
     - Default Port: `5454`
     - Default Database: `dev`
+      <img src="images/dbeaver-redshift-serverless-jdbc.png" alt=""></img>
   - OK
 
 * DBeaver에 Redshift JDBC driver Connection Template(`jdbc:redshift:iam://`) 등록
@@ -432,10 +433,38 @@ aws ec2 authorize-security-group-ingress \
     - URL Template: `jdbc:redshift:iam://{host}:{port}/{database}`
     - Default Port: `5454`
     - Default Database: `dev`
+      <img src="images/dbeaver-redshift-serverless-iam.png" alt=""></img>
   - OK
 
 # AWS IAM Identity provider 구성
 * SAML 2.0 Identity Provider Metadata 다운로드
+  - Keycloak admin site에서 newbankrealm 접속
+    ```
+    https://[Keycloak PrivateDnsName]:8081/admin/master/console/#/newbankrealm
+    ```
+  - Keycloak admin site self-signed 인증서 다운로드
+    <img src="images/keycloak-newbankrealm-saml-download1.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-download2.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-download3.png" alt=""></img>
+  - self-signed 인증서 Trusted Root Certification Authorities 등록
+    <img src="images/keycloak-newbankrealm-saml-cert1.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-cert2.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-cert3.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-cert4.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-cert5.png" alt=""></img>
+    <img src="images/keycloak-newbankrealm-saml-cert6.png" alt=""></img>
+  - newbankrealm SAML 2.0 Identity Provider Metadata 다운로드
+    - newbankrealm > Realmsetting
+      <img src="images/keycloak-newbankrealm-saml-metadata1.png" alt=""></img>
+      <img src="images/keycloak-newbankrealm-saml-metadata2.png" alt=""></img>
+    - Metadata URL 복사
+      <img src="images/keycloak-newbankrealm-saml-metadata3.png" alt=""></img>
+    - Metadata 다운로드
+      ```
+      curl https://[Keycloak PrivateDnsName]:8081/realms/newbankrealm/protocol/saml/descriptor -OutFile descriptor.xml
+      ```
+
+# AWS IAM Identity provider 등록
 * IAM Console 접속
 * Add Provider
 * saml provider arn 확인
