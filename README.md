@@ -581,7 +581,7 @@ When you configure your Amazon Redshift Serverless instance, open Additional con
 
 Driver Name: `Redshift-Serverless-jdbc`
 
-# DBeaver Test Connection using Redshift-Serverless-jdbc Driver
+# DBeaver Test Connection as a redshift admin user
 * 새로운 connection 생성
   <img src="images/dbeaver-jdbc1.png" alt=""></img>
 * 데이터베이스, 커넥션 템플릿 선택
@@ -600,7 +600,7 @@ Driver Name: `Redshift-Serverless-jdbc`
   - Connection Name: `dev-jdbc`
     <img src="images/dbeaver-jdbc5.png" alt=""></img>
 
-# DBeaver Test Connection using Redshift-Serverless-iam Driver
+# DBeaver Test Connection using SAML 2.0
 * 새로운 connection 생성
   <img src="images/dbeaver-iam1.png" alt=""></img>
 * 데이터베이스, 커넥션 템플릿 선택
@@ -654,7 +654,7 @@ Driver Name: `Redshift-Serverless-jdbc`
     <img src="images/dbeaver-iam21.png" alt=""></img>
 
 
-# Keycolak newbankrealm Mapper(SAML Attribute) 구성
+# Keycloak newbankrealm Mapper(SAML Attribute) 구성
 * Keycloak newbankrealm admin 접속
   <img src="images/keycloak-role1.png" alt=""></img>
 * Client ID(urn:amazon:webservices) 선택
