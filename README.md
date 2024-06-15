@@ -18,10 +18,8 @@
 ## 환경 변수 정의
 
 ```
-REGION=$(aws configure get region) 
+REGION=$(aws configure get region)
 ACCOUNT=$(aws sts get-caller-identity --query 'Account' --output text)
-echo $REGION
-echo $ACCOUNT
 ```
 
 ```
@@ -29,7 +27,12 @@ aws ec2 describe-vpcs --region $REGION  --query 'Vpcs[].{VpcId: VpcId, Tags: Tag
 ```
 
 ```
-VPC_ID=vpc-12345678901234567
+VPC_ID=your-VpcId
+```
+
+```
+echo $REGION
+echo $ACCOUNT
 echo $VPC_ID
 ```
 
