@@ -1,6 +1,8 @@
 # redshift-serverless-with-saml
 > Redshift Serverless, SAML, Keycloak, DBeaver
 
+## (2024.0.16) *기본 브라우저 변경 Chrome -> Firefox*
+
 ---
 
 # VPC 구성
@@ -519,9 +521,11 @@ aws redshift-serverless get-workgroup --workgroup-name newbank-serverless-workgr
 
 ## `DBeaver Windows Client`에 tools 설치
 - Server Manager > Local Server > IE Enhanced Security Configuration: Off
-- Chrome 설치
-- Chrome을 기본 브라우저로 설정 및 시크릿 모드 실행
-- 크롬 확장 프로그램 SAML-tracer 설치 및 실행
+- ~~Chrome 설치~~
+- ~~Chrome을 기본 브라우저로 설정 및 시크릿 모드 실행~~
+- ~~크롬 확장 프로그램 SAML-tracer 설치 및 실행~~
+- Firefox 설치 및 기본 브라우저로 설정
+- Firefox 확장 프로그램 SAML-tracer 설치 및 실행
 - [DBeaver 다운로드](https://dbeaver.io/download/)
 - DBeaver 설치
 - [Redshift JDBC driver 다운로드](https://s3.amazonaws.com/redshift-downloads/drivers/jdbc/2.1.0.28/redshift-jdbc42-2.1.0.28.zip)
