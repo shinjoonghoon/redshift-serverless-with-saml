@@ -1,7 +1,11 @@
 # redshift-serverless-with-saml
 > Redshift Serverless, SAML, Keycloak, DBeaver
 
+---
+# 변경 사항
+
 ## (2024.06.16) *기본 브라우저 변경 Chrome -> Firefox*
+> `BrowserSAMLCredentialsProvider` 플러그인 사용시 기본 브라우저가 Chrome인 경우 SSO 인증 과정(`로컬 서버로의 redirection`) 중 높은 확률로 오류가 발생합니다.
 
 ---
 
