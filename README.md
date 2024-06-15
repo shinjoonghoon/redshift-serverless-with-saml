@@ -1,7 +1,7 @@
 # redshift-serverless-with-saml
 > Redshift Serverless, SAML, Keycloak, DBeaver
 
-## (2024.0.16) *기본 브라우저 변경 Chrome -> Firefox*
+## (2024.06.16) *기본 브라우저 변경 Chrome -> Firefox*
 
 ---
 
